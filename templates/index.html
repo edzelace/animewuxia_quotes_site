@@ -5,12 +5,13 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Anime Quotes</title>
   <script src="https://cdn.tailwindcss.com"></script>
-<meta name="google-adsense-account" content="ca-pub-2540596238584085">
-<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2540596238584085"
+  <meta name="google-adsense-account" content="ca-pub-2540596238584085">
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2540596238584085"
      crossorigin="anonymous"></script>
 </head>
-<body class="bg-gray-100 text-gray-800 font-sans">
-  <div class="max-w-3xl mx-auto p-6">
+<body class="bg-gray-100 text-gray-800 font-sans flex flex-col min-h-screen">
+
+  <div class="max-w-3xl mx-auto p-6 flex-grow">
     <h1 class="text-4xl font-bold text-center mb-6">Anime Quotes</h1>
 
     <div class="flex flex-col md:flex-row gap-4 mb-6">
@@ -26,6 +27,11 @@
 
     <div id="quote-container" class="space-y-6"></div>
   </div>
+
+  <footer class="bg-white border-t border-gray-300 py-4 text-center text-sm text-gray-600">
+    <p>Unique visitors: {{ unique_visits }}</p>
+    <p class="mt-1">&copy; {{ now.year }} <a href="https://less-real.com" class="text-blue-500 hover:underline" target="_blank">less-real.com</a></p>
+  </footer>
 
   <script>
     async function getRandomQuote() {
@@ -64,6 +70,5 @@
 
     getRandomQuote();
   </script>
-<p>Unique visitors: {{ unique_visits }}</p>
 </body>
 </html>

@@ -1,6 +1,7 @@
 from flask import Flask, jsonify, request, render_template
 import sqlite3
 import os
+from datetime import datetime
 
 app = Flask(__name__)
 
@@ -50,7 +51,7 @@ def home():
         cursor = conn.execute("SELECT COUNT(*) FROM visitors")
         unique_visits = cursor.fetchone()[0]
 
-    return render_template('index.html', unique_visits=unique_visits)
+    return render_template('index.html', unique_visits=unique_visits, now=datetime.utcnow())
 
 @app.route('/quotes/random')
 def random_quote():
