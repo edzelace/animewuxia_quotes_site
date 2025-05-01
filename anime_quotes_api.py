@@ -1,8 +1,8 @@
 from flask import Flask, jsonify, request, render_template
 import sqlite3
-from flask import send_file
+import os
 
-app = Flask(__name__, static_folder='.', template_folder='.')
+app = Flask(__name__)
 
 DB_PATH = 'anime_quotes.db'
 
@@ -45,4 +45,5 @@ def get_quotes():
     return jsonify([dict(row) for row in results])
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    port = int(os.environ.get("PORT", 8080))  # Default to 8080 if not set
+    app.run(host='0.0.0.0', port=port, debug=True)
