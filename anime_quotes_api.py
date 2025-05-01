@@ -38,6 +38,12 @@ def initialize_visitors_table():
 
 # ---------- ROUTES ----------
 
+@app.route('/about')
+def about():
+    from datetime import datetime
+    return render_template('about.html', now=datetime.utcnow())
+
+
 @app.route('/')
 def home():
     ip = request.headers.get('X-Forwarded-For', request.remote_addr)
