@@ -3,63 +3,51 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Anime & Wuxia Quotes</title>
-
-  <!-- Tailwind CSS -->
+  <title>Hanabira Archives</title>
   <script src="https://cdn.tailwindcss.com"></script>
-
-  <!-- Google Fonts: Aesthetic Combination -->
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;700&family=Quicksand:wght@400;600&display=swap" rel="stylesheet">
-
-  <!-- Tailwind Custom Font Config -->
-  <script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          fontFamily: {
-            heading: ['Playfair Display', 'serif'],
-            body: ['Quicksand', 'sans-serif'],
-          },
-        },
-      },
+  <link rel="icon" type="image/png" href="{{ url_for('static', filename='favicon.png') }}">
+  <link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Crimson Pro', serif;
     }
-  </script>
-
-  <!-- Adsense -->
-  <meta name="google-adsense-account" content="ca-pub-2540596238584085">
-  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2540596238584085" crossorigin="anonymous"></script>
+  </style>
 </head>
+<body class="bg-gray-100 text-gray-800 font-sans">
+  <div class="max-w-3xl mx-auto p-6">
+    
+    <!-- Logo and Title -->
+    <div class="flex flex-col items-center mb-6">
+      <img src="{{ url_for('static', filename='logo.png') }}" alt="Hanabira Archives Logo"
+           class="w-24 h-24 mb-2 rounded-full shadow-md hover:scale-105 transition-transform duration-200">
+      <h1 class="text-4xl font-bold tracking-widest">Hanabira Archives</h1>
+      <p class="text-sm text-gray-500 italic">Where memories blossom again.</p>
+    </div>
+	
 
-<body class="bg-gradient-to-b from-pink-50 to-white text-gray-800 font-body min-h-screen flex flex-col justify-between">
-
-  <!-- Header -->
-  <header class="text-center py-8">
-    <img src="/static/logo.png" alt="Logo" class="w-16 mx-auto mb-2">
-    <h1 class="text-5xl font-heading text-pink-600 mb-2">Anime & Wuxia Quotes</h1>
-    <p class="text-gray-600 text-lg font-medium">Curated words of power, love, and longing from anime and webnovels.</p>
-  </header>
-
-  <!-- Main Content -->
-  <main class="max-w-3xl mx-auto px-4 pb-24">
+    <!-- Search Inputs -->
     <div class="flex flex-col md:flex-row gap-4 mb-6">
-      <input id="anime" type="text" placeholder="Filter by Anime" class="p-3 border border-gray-300 rounded-xl w-full" />
-      <input id="character" type="text" placeholder="Filter by Character" class="p-3 border border-gray-300 rounded-xl w-full" />
-      <input id="keyword" type="text" placeholder="Search by Keyword" class="p-3 border border-gray-300 rounded-xl w-full" />
+      <input id="anime" type="text" placeholder="Filter by Anime" class="p-2 border border-gray-300 rounded-xl w-full" />
+      <input id="character" type="text" placeholder="Filter by Character" class="p-2 border border-gray-300 rounded-xl w-full" />
+      <input id="keyword" type="text" placeholder="Search by Keyword" class="p-2 border border-gray-300 rounded-xl w-full" />
     </div>
 
+    <!-- Action Buttons -->
     <div class="flex gap-4 mb-6">
-      <button onclick="getRandomQuote()" class="bg-pink-500 text-white px-6 py-2 rounded-xl hover:bg-pink-600 transition">Random Quote</button>
-      <button onclick="searchQuotes()" class="bg-indigo-500 text-white px-6 py-2 rounded-xl hover:bg-indigo-600 transition">Search</button>
+      <button onclick="getRandomQuote()" class="bg-blue-500 text-white px-4 py-2 rounded-xl hover:bg-blue-600">Random Quote</button>
+      <button onclick="searchQuotes()" class="bg-green-500 text-white px-4 py-2 rounded-xl hover:bg-green-600">Search</button>
     </div>
 
+    <!-- Quote Display -->
     <div id="quote-container" class="space-y-6"></div>
-  </main>
+  </div>
 
-  <!-- Fixed Footer -->
-	<div class="fixed bottom-0 left-0 w-full bg-white border-t border-gray-300 py-3 text-center text-sm">
-		<p>Unique visitors: {{ unique_visits }} · <a href="/about" class="text-blue-600 hover:underline">About</a></p>
-		<p class="text-gray-500">© less-real.com tribute</p>
-	</div>
+  <!-- Footer -->
+  <footer class="fixed bottom-0 left-0 w-full bg-white border-t text-center p-2 text-sm text-gray-600">
+    Unique visitors: {{ unique_visits }} · © <a href="https://less-real.com" class="text-blue-500 hover:underline">less-real.com</a> · Reimagined as Hanabira Archives
+	 | <p class="text-sm text-gray-600"><a href="{{ url_for('about') }}" class="text-blue-500 hover:underline">About this site</a></p>
+
+  </footer>
 
   <!-- Scripts -->
   <script>
@@ -79,10 +67,7 @@
       const data = await res.json();
       if (data.length > 0) displayQuotes(data);
       else {
-        document.getElementById('quote-container').innerHTML = `
-          <div class="bg-white rounded-2xl shadow p-6 text-center">
-            <p class="text-xl italic font-heading text-gray-500">No matching quotes found.</p>
-          </div>`;
+        document.getElementById('quote-container').innerHTML = `<div class="bg-white rounded-2xl shadow-md p-6"><p class="text-xl italic mb-4">No matching quotes found.</p></div>`;
       }
     }
 
@@ -91,10 +76,10 @@
       container.innerHTML = '';
       quotes.forEach((quote) => {
         const div = document.createElement('div');
-        div.className = 'bg-white rounded-2xl shadow p-6';
+        div.className = 'bg-white rounded-2xl shadow-md p-6';
         div.innerHTML = `
-          <p class="text-xl italic font-heading text-gray-700 mb-4">"${quote.quote}"</p>
-          <p class="text-right text-sm text-gray-500 font-medium">- ${quote.character} (${quote.anime})</p>
+          <p class="text-xl italic mb-4">"${quote.quote}"</p>
+          <p class="text-right text-sm text-gray-500">- ${quote.character} (${quote.anime})</p>
         `;
         container.appendChild(div);
       });
@@ -102,6 +87,5 @@
 
     getRandomQuote();
   </script>
-
 </body>
 </html>

@@ -40,8 +40,11 @@ def initialize_visitors_table():
 
 @app.route('/about')
 def about():
-    from datetime import datetime
-    return render_template('about.html', now=datetime.utcnow())
+    with sqlite3.connect(DB_PATH) as conn:
+        cursor = conn.execute("SELECT COUNT(*) FROM visitors")
+        unique_visits = cursor.fetchone()[0]
+    return render_template('about.html', unique_visits=unique_visits)
+
 
 
 @app.route('/')

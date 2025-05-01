@@ -3,38 +3,57 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>About - Anime & Wuxia Quotes</title>
+  <title>About — Hanabira Archives</title>
   <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="icon" type="image/png" href="{{ url_for('static', filename='favicon.png') }}">
+  <link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Crimson Pro', serif;
+    }
+  </style>
 </head>
-<body class="bg-gray-100 text-gray-800 font-sans flex flex-col min-h-screen">
+<body class="bg-gray-50 text-gray-800">
+  <div class="max-w-3xl mx-auto p-6">
+    <div class="text-center mb-8">
+      <img src="{{ url_for('static', filename='logo.png') }}" alt="Hanabira Archives Logo" class="w-20 h-20 mx-auto rounded-full shadow-md">
+      <h1 class="text-4xl font-bold mt-4">About Hanabira Archives</h1>
+      <p class="italic text-gray-500">A tribute to memories, anime, and the beauty of words.</p>
+    </div>
 
-  <div class="max-w-3xl mx-auto p-6 flex-grow">
-    <h1 class="text-4xl font-bold text-center mb-6">About This Site</h1>
+    <div class="space-y-6 text-lg leading-relaxed">
+      <p>
+        <strong>Hanabira Archives</strong> is a quiet homage to the once-beloved site <a href="https://less-real.com" class="text-blue-500 underline" target="_blank">less-real.com</a>,
+        where anime lovers gathered quotes that stirred hearts and minds. Though that site is now lost to time,
+        its legacy lives on through spreadsheets, collections, and the passion of the community.
+      </p>
 
-    <p class="mb-4 text-lg">
-      This site is a tribute to <strong>less-real.com</strong>, a once-beloved website where fans could explore, collect, and share memorable quotes from anime. Although less-real has been offline for a long time, its spirit lives on in Excel archives preserved by the community.
-    </p>
+      <p>
+        This project brings those quotes back — and more. In addition to quotes from anime, <strong>Hanabira Archives</strong>
+        now welcomes profound lines from light novels, web novels, and the poetic worlds of Chinese Wuxia and Xianxia fiction.
+      </p>
 
-    <p class="mb-4 text-lg">
-      With this modern revival, our goal is to bring that nostalgic experience back—preserving legendary quotes and introducing new ones from the latest anime, webtoons, <em>light novels</em>, and even <em>Chinese webnovels</em> like <strong>wuxia</strong> and <strong>xianxia</strong>.
-    </p>
+      <p>
+        In a world moving fast, this archive is a quiet place to remember what moved us — one line at a time.
+        It’s also a growing project — feel free to contribute quotes from the stories you love.
+      </p>
 
-    <p class="mb-4 text-lg">
-      Whether you're reminiscing about your favorite characters or discovering profound lines from unfamiliar series, we hope this site helps you reconnect with the emotions, inspiration, and wisdom that only stories can offer.
-    </p>
+      <p>
+        The name <strong>"Hanabira"</strong> (花びら) means "petal" in Japanese — symbolizing fragility, nostalgia, and the fleeting beauty of the words we collect.
+      </p>
 
-    <p class="mb-4 text-lg">
-      You can explore random quotes, search by anime, character, or keyword, and contribute to expanding the library for future fans.
-    </p>
+      <p>
+        Thank you for visiting. Let’s keep remembering.
+      </p>
+    </div>
 
-    <p class="mb-4 text-lg font-semibold">
-      This is a fan-made revival. All quotes belong to their respective creators and publishers.
-    </p>
+    <div class="text-center mt-10">
+      <a href="{{ url_for('home') }}" class="inline-block bg-blue-500 text-white px-4 py-2 rounded-xl hover:bg-blue-600">← Back to Home</a>
+    </div>
   </div>
 
-  <footer class="bg-white border-t border-gray-300 py-4 text-center text-sm text-gray-600">
-    <p>&copy; {{ now.year }} <a href="/" class="text-blue-500 hover:underline">Anime & Wuxia Quotes</a></p>
+  <footer class="text-center text-sm text-gray-500 mt-10 py-4 border-t">
+    Unique visitors: {{ unique_visits }} · © less-real.com · Reimagined as Hanabira Archives
   </footer>
-
 </body>
 </html>
