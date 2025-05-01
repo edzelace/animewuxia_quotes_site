@@ -3,6 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Hanabira Archives - A collection of memorable anime and wuxia quotes.">
+
   <title>Hanabira Archives</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="icon" type="image/png" href="{{ url_for('static', filename='favicon.png') }}">
@@ -43,7 +45,7 @@
   </div>
 
   <!-- Footer -->
-  <footer class="fixed bottom-0 left-0 w-full bg-white border-t text-center p-2 text-sm text-gray-600">
+  <footer class="fixed bottom-0 left-0 w-full bg-white border-t text-center p-4 text-sm text-gray-600">
     Unique visitors: {{ unique_visits }} · © <a href="https://less-real.com" class="text-blue-500 hover:underline">less-real.com</a> · Reimagined as Hanabira Archives
 	  <p class="text-sm text-gray-600"><a href="{{ url_for('about') }}" class="text-blue-500 hover:underline">About this site</a></p> | <a href="{{ url_for('submit') }}" class="text-blue-500 hover:underline">Submit a Quote</a> 
 
@@ -52,10 +54,17 @@
   <!-- Scripts -->
   <script>
     async function getRandomQuote() {
-      const res = await fetch('/quotes/random');
-      const data = await res.json();
-      displayQuotes([data]);
-    }
+  try {
+    const res = await fetch('/quotes/random');
+    if (!res.ok) throw new Error('Failed to fetch data');
+    const data = await res.json();
+    displayQuotes([data]);
+  } catch (error) {
+    console.error(error);
+    alert('Something went wrong, please try again later.');
+  }
+}
+
 
     async function searchQuotes() {
       const anime = document.getElementById('anime').value;

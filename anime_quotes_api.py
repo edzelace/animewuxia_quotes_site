@@ -10,11 +10,16 @@ DB_PATH = 'anime_quotes.db'
 # ---------- DATABASE HELPERS ----------
 
 def query_db(query, args=(), one=False):
-    with sqlite3.connect(DB_PATH) as conn:
-        conn.row_factory = sqlite3.Row
-        cur = conn.execute(query, args)
-        rv = cur.fetchall()
-        return (rv[0] if rv else None) if one else rv
+    try:
+        with sqlite3.connect(DB_PATH) as conn:
+            conn.row_factory = sqlite3.Row
+            cur = conn.execute(query, args)
+            rv = cur.fetchall()
+            return (rv[0] if rv else None) if one else rv
+    except sqlite3.DatabaseError as e:
+        print(f"Database error: {e}")
+        return None  # Or you could return a more specific error response
+
 
 def initialize_views_table():
     with sqlite3.connect(DB_PATH) as conn:
