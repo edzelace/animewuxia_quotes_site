@@ -1,11 +1,6 @@
 from flask import Flask, jsonify, request, render_template
 import sqlite3
-
 from flask import send_file
-
-@app.route('/')
-def home():
-    return send_file('index.html')
 
 app = Flask(__name__, static_folder='.', template_folder='.')
 
