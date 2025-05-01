@@ -45,6 +45,29 @@ def about():
         unique_visits = cursor.fetchone()[0]
     return render_template('about.html', unique_visits=unique_visits)
 
+@app.route('/submit', methods=['GET', 'POST'])
+def submit():
+    ip = request.headers.get('X-Forwarded-For', request.remote_addr)
+    with sqlite3.connect(DB_PATH) as conn:
+        conn.execute("INSERT OR IGNORE INTO visitors (ip) VALUES (?)", (ip,))
+        conn.commit()
+        cursor = conn.execute("SELECT COUNT(*) FROM visitors")
+        unique_visits = cursor.fetchone()[0]
+
+    if request.method == 'POST':
+        anime = request.form['anime'].strip()
+        character = request.form['character'].strip()
+        quote = request.form['quote'].strip()
+
+        if not (anime and character and quote):
+            return render_template('submit.html', unique_visits=unique_visits, message="All fields are required.", success=False)
+
+        with sqlite3.connect(DB_PATH) as conn:
+            conn.execute("INSERT INTO quotes (anime, character, quote) VALUES (?, ?, ?)", (anime, character, quote))
+            conn.commit()
+        return render_template('submit.html', unique_visits=unique_visits, message="Quote submitted successfully!", success=True)
+
+    return render_template('submit.html', unique_visits=unique_visits)
 
 
 @app.route('/')
