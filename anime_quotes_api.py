@@ -6,6 +6,8 @@ app = Flask(__name__)
 
 DB_PATH = 'anime_quotes.db'
 
+# ---------- DATABASE HELPERS ----------
+
 def query_db(query, args=(), one=False):
     with sqlite3.connect(DB_PATH) as conn:
         conn.row_factory = sqlite3.Row
@@ -13,9 +15,42 @@ def query_db(query, args=(), one=False):
         rv = cur.fetchall()
         return (rv[0] if rv else None) if one else rv
 
+def initialize_views_table():
+    with sqlite3.connect(DB_PATH) as conn:
+        conn.execute("""
+            CREATE TABLE IF NOT EXISTS views (
+                id INTEGER PRIMARY KEY CHECK (id = 1),
+                count INTEGER DEFAULT 0
+            )
+        """)
+        conn.execute("INSERT OR IGNORE INTO views (id, count) VALUES (1, 0)")
+        conn.commit()
+
+def initialize_visitors_table():
+    with sqlite3.connect(DB_PATH) as conn:
+        conn.execute("""
+            CREATE TABLE IF NOT EXISTS visitors (
+                ip TEXT PRIMARY KEY
+            )
+        """)
+        conn.commit()
+
+# ---------- ROUTES ----------
+
 @app.route('/')
 def home():
-    return render_template('index.html')
+    ip = request.headers.get('X-Forwarded-For', request.remote_addr)
+
+    with sqlite3.connect(DB_PATH) as conn:
+        # Add unique IP
+        conn.execute("INSERT OR IGNORE INTO visitors (ip) VALUES (?)", (ip,))
+        conn.commit()
+
+        # Get unique visitor count
+        cursor = conn.execute("SELECT COUNT(*) FROM visitors")
+        unique_visits = cursor.fetchone()[0]
+
+    return render_template('index.html', unique_visits=unique_visits)
 
 @app.route('/quotes/random')
 def random_quote():
@@ -44,6 +79,10 @@ def get_quotes():
     results = query_db(query, params)
     return jsonify([dict(row) for row in results])
 
+# ---------- STARTUP ----------
+
 if __name__ == '__main__':
-    port = int(os.environ.get("PORT", 8080))  # Default to 8080 if not set
+    initialize_views_table()
+    initialize_visitors_table()
+    port = int(os.environ.get("PORT", 8080))
     app.run(host='0.0.0.0', port=port, debug=True)
