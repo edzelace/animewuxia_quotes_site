@@ -56,9 +56,10 @@
   </main>
 
   <!-- Fixed Footer -->
-  <footer class="bg-white text-center text-sm text-gray-500 border-t p-4 w-full fixed bottom-0 left-0 font-medium">
-    Unique visitors: {{ unique_visits }} &nbsp;|&nbsp; © inspired by <a href="https://www.less-real.com" class="text-pink-600 hover:underline">less-real.com</a>
-  </footer>
+	<div class="fixed bottom-0 left-0 w-full bg-white border-t border-gray-300 py-3 text-center text-sm">
+		<p>Unique visitors: {{ unique_visits }} · <a href="/about" class="text-blue-600 hover:underline">About</a></p>
+		<p class="text-gray-500">© less-real.com tribute</p>
+	</div>
 
   <!-- Scripts -->
   <script>
