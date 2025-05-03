@@ -20,7 +20,7 @@ def query_db(query, args=(), one=False):
             return (rv[0] if rv else None) if one else rv
     except sqlite3.DatabaseError as e:
         print(f"Database error: {e}")
-        return None  # Or you could return a more specific error response
+        return None
 
 def initialize_views_table():
     with sqlite3.connect(DB_PATH) as conn:
@@ -52,4 +52,55 @@ def about():
     return render_template('about.html', unique_visits=unique_visits)
 
 @app.route('/submit', methods=['GET', 'POST'])
-def
+def submit():
+    ip = request.headers.get('X-Forwarded-For', request.remote_addr)
+    with sqlite3.connect(DB_PATH) as conn:
+        conn.execute("INSERT OR IGNORE INTO visitors (ip) VALUES (?)", (ip,))
+        conn.commit()
+        cursor = conn.execute("SELECT COUNT(*) FROM visitors")
+        unique_visits = cursor.fetchone()[0]
+
+    if request.method == 'POST':
+        anime = request.form['anime'].strip()
+        character = request.form['character'].strip()
+        quote = request.form['quote'].strip()
+
+        if not (anime and character and quote):
+            return render_template('submit.html', unique_visits=unique_visits, message="All fields are required.", success=False)
+
+        with sqlite3.connect(DB_PATH) as conn:
+            conn.execute("INSERT INTO quotes (anime, character, quote) VALUES (?, ?, ?)", (anime, character, quote))
+            conn.commit()
+        return render_template('submit.html', unique_visits=unique_visits, message="Quote submitted successfully!", success=True)
+
+    return render_template('submit.html', unique_visits=unique_visits)
+
+@app.route('/')
+def home():
+    ip = request.headers.get('X-Forwarded-For', request.remote_addr)
+
+    with sqlite3.connect(DB_PATH) as conn:
+        conn.execute("INSERT OR IGNORE INTO visitors (ip) VALUES (?)", (ip,))
+        conn.commit()
+        cursor = conn.execute("SELECT COUNT(*) FROM visitors")
+        unique_visits = cursor.fetchone()[0]
+
+    return render_template('index.html', unique_visits=unique_visits, now=datetime.utcnow())
+
+@app.route('/quotes/random')
+def random_quote():
+    result = query_db("SELECT * FROM quotes ORDER BY RANDOM() LIMIT 1", one=True)
+    return jsonify(dict(result)) if result else jsonify({"error": "No quote found"}), 404
+
+@app.route('/quotes')
+def get_quotes():
+    anime = request.args.get('anime')
+    character = request.args.get('character')
+    keyword = request.args.get('keyword')
+
+    query = "SELECT * FROM quotes WHERE 1=1"
+    params = []
+
+    if anime:
+        query += " AND anime LIKE ?"
+        params.append(f"%{anime}%")
