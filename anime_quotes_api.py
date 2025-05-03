@@ -89,8 +89,23 @@ def home():
 
 @app.route('/quotes/random')
 def random_quote():
-    result = query_db("SELECT * FROM quotes ORDER BY RANDOM() LIMIT 1", one=True)
-    return jsonify(dict(result)) if result else jsonify({"error": "No quote found"}), 404
+    try:
+        result = query_db("SELECT * FROM quotes ORDER BY RANDOM() LIMIT 1", one=True)
+        
+        # If no result is returned from the query
+        if not result:
+            return jsonify({"error": "No quote found"}), 404
+        
+        # If a result is found, return the quote
+        return jsonify(dict(result))
+    
+    except Exception as e:
+        # Log the error for debugging
+        print(f"Error occurred while fetching random quote: {e}")
+        
+        # Return a 500 error for server issues
+        return jsonify({"error": "Internal server error"}), 500
+
 
 @app.route('/quotes')
 def get_quotes():
