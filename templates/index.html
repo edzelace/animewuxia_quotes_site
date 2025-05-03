@@ -52,9 +52,11 @@
 
   <!-- Scripts -->
   <script>
+    const API_BASE = 'https://animewuxia-quotes-site.onrender.com';
+
     async function getRandomQuote() {
       try {
-        const res = await fetch('quotes/random.json');
+        const res = await fetch(`${API_BASE}/quotes/random`);
         if (!res.ok) throw new Error('Failed to fetch data');
         const data = await res.json();
         displayQuotes([data]);
@@ -69,18 +71,25 @@
       const character = document.getElementById('character').value.toLowerCase();
       const keyword = document.getElementById('keyword').value.toLowerCase();
 
-      const res = await fetch('quotes/all.json');
-      const data = await res.json();
+      const url = new URL(`${API_BASE}/quotes`);
+      if (anime) url.searchParams.append('anime', anime);
+      if (character) url.searchParams.append('character', character);
+      if (keyword) url.searchParams.append('keyword', keyword);
 
-      const filtered = data.filter(q =>
-        (!anime || q.anime.toLowerCase().includes(anime)) &&
-        (!character || q.character.toLowerCase().includes(character)) &&
-        (!keyword || q.quote.toLowerCase().includes(keyword))
-      );
+      try {
+        const res = await fetch(url);
+        const data = await res.json();
 
-      if (filtered.length > 0) displayQuotes(filtered);
-      else {
-        document.getElementById('quote-container').innerHTML = `<div class="bg-white rounded-2xl shadow-md p-6"><p class="text-xl italic mb-4">No matching quotes found.</p></div>`;
+        if (data.length > 0) displayQuotes(data);
+        else {
+          document.getElementById('quote-container').innerHTML = `
+            <div class="bg-white rounded-2xl shadow-md p-6">
+              <p class="text-xl italic mb-4">No matching quotes found.</p>
+            </div>`;
+        }
+      } catch (error) {
+        console.error(error);
+        alert('Failed to fetch quotes.');
       }
     }
 
@@ -98,6 +107,7 @@
       });
     }
 
+    // Load random quote on page load
     getRandomQuote();
   </script>
 </body>
