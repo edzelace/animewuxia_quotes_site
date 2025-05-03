@@ -104,3 +104,22 @@ def get_quotes():
     if anime:
         query += " AND anime LIKE ?"
         params.append(f"%{anime}%")
+    if character:
+        query += " AND character LIKE ?"
+        params.append(f"%{character}%")
+    if keyword:
+        query += " AND quote LIKE ?"
+        params.append(f"%{keyword}%")
+
+    results = query_db(query, params)
+    return jsonify([dict(row) for row in results])
+
+# ---------- STARTUP ----------
+
+if __name__ == '__main__':
+    # Initialize the database tables
+    initialize_views_table()
+    initialize_visitors_table()
+
+    # Get the port from environment variables (Render expects this)
+    port = int(os.environ.get("PORT", 8080
