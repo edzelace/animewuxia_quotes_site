@@ -4,10 +4,9 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="description" content="Hanabira Archives - A collection of memorable anime and wuxia quotes.">
-
   <title>Hanabira Archives</title>
   <script src="https://cdn.tailwindcss.com"></script>
-  <link rel="icon" type="image/png" href="{{ url_for('static', filename='favicon.png') }}">
+  <link rel="icon" type="image/png" href="static/favicon.png">
   <link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:wght@400;700&display=swap" rel="stylesheet">
   <style>
     body {
@@ -17,15 +16,13 @@
 </head>
 <body class="bg-gray-100 text-gray-800 font-sans">
   <div class="max-w-3xl mx-auto p-6">
-    
     <!-- Logo and Title -->
     <div class="flex flex-col items-center mb-6">
-      <img src="{{ url_for('static', filename='logo.png') }}" alt="Hanabira Archives Logo"
+      <img src="static/logo.png" alt="Hanabira Archives Logo"
            class="w-24 h-24 mb-2 rounded-full shadow-md hover:scale-105 transition-transform duration-200">
       <h1 class="text-4xl font-bold tracking-widest">Hanabira Archives</h1>
       <p class="text-sm text-gray-500 italic">Where memories blossom again.</p>
     </div>
-	
 
     <!-- Search Inputs -->
     <div class="flex flex-col md:flex-row gap-4 mb-6">
@@ -46,35 +43,42 @@
 
   <!-- Footer -->
   <footer class="fixed bottom-0 left-0 w-full bg-white border-t text-center p-4 text-sm text-gray-600">
-    Unique visitors: {{ unique_visits }} · © <a href="https://less-real.com" class="text-blue-500 hover:underline">less-real.com</a> · Reimagined as Hanabira Archives
-	  <p class="text-sm text-gray-600"><a href="{{ url_for('about') }}" class="text-blue-500 hover:underline">About this site</a></p> | <a href="{{ url_for('submit') }}" class="text-blue-500 hover:underline">Submit a Quote</a> 
-
+    Unique visitors counter unavailable on GitHub Pages · © <a href="https://less-real.com" class="text-blue-500 hover:underline">less-real.com</a> · Reimagined as Hanabira Archives
+    <p class="text-sm text-gray-600">
+      <a href="about.html" class="text-blue-500 hover:underline">About this site</a> | 
+      <a href="submit.html" class="text-blue-500 hover:underline">Submit a Quote</a>
+    </p>
   </footer>
 
   <!-- Scripts -->
   <script>
     async function getRandomQuote() {
-  try {
-    const res = await fetch('/quotes/random');
-    if (!res.ok) throw new Error('Failed to fetch data');
-    const data = await res.json();
-    displayQuotes([data]);
-  } catch (error) {
-    console.error(error);
-    alert('Something went wrong, please try again later.');
-  }
-}
-
+      try {
+        const res = await fetch('quotes/random.json');
+        if (!res.ok) throw new Error('Failed to fetch data');
+        const data = await res.json();
+        displayQuotes([data]);
+      } catch (error) {
+        console.error(error);
+        alert('Something went wrong, please try again later.');
+      }
+    }
 
     async function searchQuotes() {
-      const anime = document.getElementById('anime').value;
-      const character = document.getElementById('character').value;
-      const keyword = document.getElementById('keyword').value;
-      const params = new URLSearchParams({ anime, character, keyword });
+      const anime = document.getElementById('anime').value.toLowerCase();
+      const character = document.getElementById('character').value.toLowerCase();
+      const keyword = document.getElementById('keyword').value.toLowerCase();
 
-      const res = await fetch(`/quotes?${params.toString()}`);
+      const res = await fetch('quotes/all.json');
       const data = await res.json();
-      if (data.length > 0) displayQuotes(data);
+
+      const filtered = data.filter(q =>
+        (!anime || q.anime.toLowerCase().includes(anime)) &&
+        (!character || q.character.toLowerCase().includes(character)) &&
+        (!keyword || q.quote.toLowerCase().includes(keyword))
+      );
+
+      if (filtered.length > 0) displayQuotes(filtered);
       else {
         document.getElementById('quote-container').innerHTML = `<div class="bg-white rounded-2xl shadow-md p-6"><p class="text-xl italic mb-4">No matching quotes found.</p></div>`;
       }

@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>About — Hanabira Archives</title>
   <script src="https://cdn.tailwindcss.com"></script>
-  <link rel="icon" type="image/png" href="{{ url_for('static', filename='favicon.png') }}">
+  <link rel="icon" type="image/png" href="static/favicon.png">
   <link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:wght@400;700&display=swap" rel="stylesheet">
   <style>
     body {
@@ -16,7 +16,7 @@
 <body class="bg-gray-50 text-gray-800">
   <div class="max-w-3xl mx-auto p-6">
     <div class="text-center mb-8">
-      <img src="{{ url_for('static', filename='logo.png') }}" alt="Hanabira Archives Logo" class="w-20 h-20 mx-auto rounded-full shadow-md">
+      <img src="static/logo.png" alt="Hanabira Archives Logo" class="w-20 h-20 mx-auto rounded-full shadow-md">
       <h1 class="text-4xl font-bold mt-4">About Hanabira Archives</h1>
       <p class="italic text-gray-500">A tribute to memories, anime, and the beauty of words.</p>
     </div>
@@ -48,12 +48,12 @@
     </div>
 
     <div class="text-center mt-10">
-      <a href="{{ url_for('home') }}" class="inline-block bg-blue-500 text-white px-4 py-2 rounded-xl hover:bg-blue-600">← Back to Home</a>
+      <a href="index.html" class="inline-block bg-blue-500 text-white px-4 py-2 rounded-xl hover:bg-blue-600">← Back to Home</a>
     </div>
   </div>
 
   <footer class="text-center text-sm text-gray-500 mt-10 py-4 border-t">
-    Unique visitors: {{ unique_visits }} · © less-real.com · Reimagined as Hanabira Archives | <a href="{{ url_for('submit') }}" class="text-blue-500 hover:underline">Submit a Quote</a>
+    Unique visitors counter unavailable on GitHub Pages · © less-real.com · Reimagined as Hanabira Archives | <a href="submit.html" class="text-blue-500 hover:underline">Submit a Quote</a>
   </footer>
 </body>
 </html>
