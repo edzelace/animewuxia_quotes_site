@@ -122,4 +122,7 @@ if __name__ == '__main__':
     initialize_visitors_table()
 
     # Get the port from environment variables (Render expects this)
-    port = int(os.environ.get("PORT", 8080
+    port = int(os.environ.get("PORT", 8080))
+    
+    # Run the Flask app on 0.0.0.0 to be accessible externally
+    app.run(host='0.0.0.0', port=port, debug=True)
